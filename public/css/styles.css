@@ -1,0 +1,379 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+header {
+    flex-shrink: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    height: 40px;
+    margin-left: 10px;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-right: 20px; 
+}
+
+.nav-right p {
+    margin-right: 10px;
+}
+
+.nav-right form {
+    margin-left: 10px;
+}
+
+.nav-right a,
+.nav-right form button {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #6c63ff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    width: 100%;
+}
+
+/* Index Page Styles */
+.index-page .hero {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    padding: 50px 20px;
+    gap: 20px; 
+}
+
+.index-page .hero img {
+    width: 400px; 
+    max-width: 100%;
+    height: auto;
+}
+
+.index-page .hero h1 {
+    font-size: 48px;
+    margin: 20px 0;
+}
+
+.index-page .hero h1 span {
+    color: #6c63ff;
+}
+
+.index-page .hero p {
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.index-page .hero .cta {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.index-page .hero .cta a {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.index-page .hero .cta .btn-primary {
+    background-color: #6c63ff;
+    color: #fff;
+}
+
+.index-page .hero .cta .btn-secondary {
+    border: 2px solid #6c63ff;
+    color: #6c63ff;
+}
+
+/* Features Section */
+.index-page .features {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.index-page .features h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.index-page .features p {
+    font-size: 18px;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+/* General Styles for All Pages */
+.page-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Login and Register Page Styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 100px 20px;
+}
+
+.auth-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+}
+
+.auth-box h1 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.auth-box p {
+    margin-bottom: 1.5rem;
+}
+
+.auth-box a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+}
+
+.social-login button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.google-login {
+    background-color: #fff;
+    color: #757575;
+}
+
+.apple-login {
+    background-color: #000;
+    color: #fff;
+}
+
+.divider {
+    margin: 1.5rem 0;
+    position: relative;
+    text-align: center;
+    color: #999;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.divider::before {
+    left: 0;
+}
+
+.divider::after {
+    right: 0;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-btn,
+.register-btn {
+    width: 100%;
+    background-color: #6200ea;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    display: block;
+    margin-top: 1rem;
+    color: #007bff;
+    text-decoration: none;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 1rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+/* Subscriptions Page Styles */
+.subscriptions-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    overflow-x: auto; 
+}
+
+.subscriptions-page .header-container {
+    padding-right: 50px; 
+}
+
+.subscriptions-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #6c63ff;
+    color: #fff;
+}
+
+.btn-edit {
+    background-color: #4caf50;
+    color: #fff;
+    margin-right: 5px;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.inline-form {
+    display: inline;
+}
+
+/* Subscriptions Table Styles */
+.subscriptions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed; 
+}
+
+.subscriptions-table th,
+.subscriptions-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    word-wrap: break-word; 
+}
+
+.subscriptions-table th {
+    background-color: #f0f4ff;
+    font-weight: bold;
+}
+
+.subscriptions-table td {
+    background-color: #ffffff;
+}
+
+.subscriptions-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}

@@ -1,0 +1,47 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<div class="register-container">
+  <div class="register-box">
+    <h1>Get started with Saver Sub</h1>
+    <p>Join Saver Sub for free. Already registered? <a href="/sessions/logon">Login</a></p>
+    
+    <form method="POST" action="/sessions/register">
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+      
+      <div class="input-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+      </div>
+      
+      <div class="input-group">
+        <label for="password1">Confirm Password</label>
+        <input type="password" id="password1" name="password1" placeholder="Confirm password" required>
+      </div>
+      
+      <button type="submit" class="register-btn">Create Account</button>
+      
+      <a href="/" class="cancel-btn">Cancel</a>
+    </form>
+  </div>
+  <div class="register-info">
+    <h2>Why you'll love Saver Sub...</h2>
+    <ul>
+      <li><i class="fas fa-check"></i> Get control over your subscriptions<br></li>
+      <li><i class="fas fa-check"></i> We protect your privacy<br></li>
+      <li><i class="fas fa-check"></i> Free Plan, forever<br></li>
+    </ul>
+  </div>
+</div>
+
+<%- include("partials/footer.ejs") %>

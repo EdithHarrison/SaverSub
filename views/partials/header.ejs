@@ -1,0 +1,29 @@
+<header class="header-container">
+  <div class="header-logo-container">
+    <span class="header-title">Saver Sub</span>
+    <img src="/images/logo.png" alt="Saver Sub Logo" class="header-logo">
+  </div>
+  <div class="nav-right">
+    <% if (user) { %>
+      <p>User <%= user.name %> is logged on.</p>
+      <form method="POST" action="/sessions/logoff">
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        <button>Logoff</button>
+      </form>
+    <% } %>
+  </div>
+  <% if (errors) {
+      errors.forEach((err) => { %>
+        <div>
+          Error: <%= err %>
+        </div>
+      <% })
+    } %>
+  <% if (info) {
+      info.forEach((msg) => { %>
+        <div>
+          Info: <%= msg %>
+        </div>
+      <% })
+    } %>
+</header>

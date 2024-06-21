@@ -12,6 +12,7 @@ const storeLocals = require("./middleware/storeLocals");
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
+const path = require('path');
 require("dotenv").config();
 
 const app = express();
@@ -82,15 +83,27 @@ app.use((req, res, next) => {
 
 app.use(storeLocals);
 
+// Middleware to pass current year to all views
+app.use((req, res, next) => {
+  res.locals.currentYear = new Date().getFullYear();
+  next();
+});
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", { page: 'index', user: req.user });
 });
 
 app.use("/sessions", require("./routes/sessionRoutes"));
 
 const auth = require("./middleware/auth");
 const subscriptions = require("./routes/subscriptionRoutes");
-app.use("/subscriptions", auth, subscriptions);
+app.use("/subscriptions", auth, (req, res, next) => {
+  res.locals.page = 'subscriptions';
+  next();
+}, subscriptions);
 
 app.use((req, res) => {
   res.status(404).send(`That page (${req.url}) was not found.`);

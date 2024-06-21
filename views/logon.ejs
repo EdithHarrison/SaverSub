@@ -1,0 +1,23 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<main class="login-container">
+    <div class="login-box">
+        <h1>Log In</h1>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>">
+            <div class="input-group">
+                <label for="email">Enter your email:</label>
+                <input type="email" name="email" required />
+            </div>
+            <div class="input-group">
+                <label for="password">Enter your password:</label>
+                <input type="password" name="password" required />
+            </div>
+            <button class="login-btn">Log In</button>
+            <a href="/" class="cancel-btn">Cancel</a>
+        </form>
+    </div>
+</main>
+
+<%- include("partials/footer.ejs") %>
