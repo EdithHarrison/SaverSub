@@ -1,0 +1,25 @@
+<h1><%= subscription ? 'Edit Subscription' : 'New Subscription' %></h1>
+  <form action="<%= subscription ? '/subscriptions/update/' + subscription._id : '/subscriptions' %>" method="post">
+    <input type="hidden" name="_csrf" value="<%= _csrf %>">
+    <label for="company">Company:</label>
+    <input type="text" id="company" name="company" value="<%= subscription ? subscription.company : '' %>" required><br>
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate" value="<%= subscription ? subscription.dueDate.toISOString().split('T')[0] : '' %>" required><br>
+    <label for="monthlyPayment">Monthly Payment:</label>
+    <input type="number" id="monthlyPayment" name="monthlyPayment" value="<%= subscription ? subscription.monthlyPayment : '' %>" required><br>
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="free trial" <%= subscription && subscription.status === 'free trial' ? 'selected' : '' %>>Free Trial</option>
+      <option value="active" <%= subscription && subscription.status === 'active' ? 'selected' : '' %>>Active</option>
+      <option value="canceled" <%= subscription && subscription.status === 'canceled' ? 'selected' : '' %>>Canceled</option>
+    </select><br>
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+      <option value="Entertainment & Leisure" <%= subscription && subscription.category === 'Entertainment & Leisure' ? 'selected' : '' %>>Entertainment & Leisure</option>
+      <option value="Health & Fitness" <%= subscription && subscription.category === 'Health & Fitness' ? 'selected' : '' %>>Health & Fitness</option>
+      <option value="Finance" <%= subscription && subscription.category === 'Finance' ? 'selected' : '' %>>Finance</option>
+      <option value="Food" <%= subscription && subscription.category === 'Food' ? 'selected' : '' %>>Food</option>
+      <option value="Clothing" <%= subscription && subscription.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+    </select><br>
+    <button type="submit"><%= subscription ? 'Update Subscription' : 'Create Subscription' %></button>
+  </form>

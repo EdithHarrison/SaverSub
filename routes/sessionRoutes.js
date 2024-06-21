@@ -16,11 +16,12 @@ router
   .get(logonShow)
   .post(
     passport.authenticate("local", {
-      successRedirect: "/",
+      successRedirect: "/subscriptions", // Ensure this is set to /subscriptions
       failureRedirect: "/sessions/logon",
       failureFlash: true,
     })
   );
+
 router.route("/logoff").post(logoff);
 
 module.exports = router;

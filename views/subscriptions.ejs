@@ -1,0 +1,45 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<main class="subscriptions-page">
+    <div class="header-container subscriptions-header">
+        <h1>Your Subscriptions</h1>
+        <a href="/subscriptions/new" class="btn btn-primary">Add new subscription</a>
+    </div>
+
+    <% if (subscriptions.length > 0) { %>
+        <table class="subscriptions-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Due Date</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% subscriptions.forEach(subscription => { %>
+                    <tr>
+                        <td><%= subscription.company %></td>
+                        <td><%= subscription.dueDate.toDateString() %></td>
+                        <td>$<%= subscription.monthlyPayment %></td>
+                        <td><%= subscription.status %></td>
+                        <td><%= subscription.category %></td>
+                        <td>
+                            <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
+                            <form action="/subscriptions/delete/<%= subscription._id %>" method="post" class="inline-form">
+                                <button type="submit" class="btn btn-delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No subscriptions found.</p>
+    <% } %>
+</main>
+
+<%- include("partials/footer.ejs") %>

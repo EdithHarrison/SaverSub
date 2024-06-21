@@ -12,6 +12,7 @@ const registerDo = async (req, res, next) => {
   }
   try {
     await User.create(req.body);
+    res.redirect("/sessions/logon");
   } catch (e) {
     if (e.constructor.name === "ValidationError") {
       parseVErr(e, req);
@@ -22,22 +23,22 @@ const registerDo = async (req, res, next) => {
     }
     return res.render("register", { errors: req.flash("error") });
   }
-  res.redirect("/");
 };
 
 const logoff = (req, res) => {
   req.session.destroy(function (err) {
     if (err) {
-      console.log(err);
+      console.log('Error during logoff:', err);
       return res.redirect("/"); // Redirect to home even if there's an error
     }
-    res.redirect("/sessions/logon"); // Redirect to login page after logging out
+    res.redirect("/"); // Redirect to home page after logging out
   });
 };
 
 const logonShow = (req, res) => {
   if (req.user) {
-    return res.redirect("/");
+    console.log("User already logged in, redirecting to /subscriptions");
+    return res.redirect("/subscriptions"); // Redirect to subscriptions if already logged in
   }
   res.render("logon");
 };
