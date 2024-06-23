@@ -24,6 +24,7 @@ const createSubscription = async (req, res) => {
     req.body.email = req.user.email; // Ensure email is added to the subscription
     req.body.dueDate = moment(req.body.dueDate).toDate(); 
 
+    // Commented out debugging logs
     // console.log("Creating subscription with due date (raw):", req.body.dueDate);
     // console.log("Creating subscription with due date (moment):", moment(req.body.dueDate).toISOString());
 
@@ -44,7 +45,7 @@ const createSubscription = async (req, res) => {
     if (error.constructor.name === "ValidationError") {
       parseVErr(error, req);
       const token = csrf.token(req, res);
-      res.render("subscription", { subscription: null, errors: req.flash("error"), _csrf: token, moment });
+      res.render("subscription", { subscription: null, errors: req.flash("error"), _csrf: token, moment, req });
     } else {
       console.error("Error creating subscription:", error);
       req.flash("error", "Error creating subscription");
@@ -56,7 +57,7 @@ const createSubscription = async (req, res) => {
 // Render the form to create a new subscription
 const getSubscriptionForm = (req, res) => {
   const token = csrf.token(req, res);
-  res.render("subscription", { subscription: null, _csrf: token, moment });
+  res.render("subscription", { subscription: null, _csrf: token, moment, req });
 };
 
 // Render the form to edit an existing subscription
@@ -68,7 +69,7 @@ const editSubscriptionForm = async (req, res) => {
       return res.redirect("/subscriptions");
     }
     const token = csrf.token(req, res);
-    res.render("subscription", { subscription, _csrf: token, moment });
+    res.render("subscription", { subscription, _csrf: token, moment, req });
   } catch (error) {
     console.error("Error fetching subscription:", error);
     req.flash("error", "Error fetching subscription");
@@ -80,9 +81,6 @@ const editSubscriptionForm = async (req, res) => {
 const updateSubscription = async (req, res) => {
   try {
     req.body.dueDate = moment(req.body.dueDate).toDate();
-    // console.log("Updating subscription with due date (raw):", req.body.dueDate);
-    // console.log("Updating subscription with due date (moment):", moment(req.body.dueDate).toISOString());
-
     const subscription = await Subscription.findOneAndUpdate(
       { _id: req.params.id, createdBy: req.user._id },
       { ...req.body, email: req.user.email }, // Ensure email is updated if necessary
@@ -104,7 +102,7 @@ const updateSubscription = async (req, res) => {
     if (error.constructor.name === "ValidationError") {
       parseVErr(error, req);
       const token = csrf.token(req, res);
-      res.render("subscription", { subscription: req.body, errors: req.flash("error"), _csrf: token, moment });
+      res.render("subscription", { subscription: req.body, errors: req.flash("error"), _csrf: token, moment, req });
     } else {
       console.error("Error updating subscription:", error);
       req.flash("error", "Error updating subscription");

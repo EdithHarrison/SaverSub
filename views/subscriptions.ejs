@@ -18,7 +18,7 @@
                     <th>Status</th>
                     <th>Category</th>
                     <th>Notification Email</th>
-                    <th>Actions</th>
+                    <th class="actions">Actions</th> 
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                         <td><%= subscription.status %></td>
                         <td><%= subscription.category %></td>
                         <td><%= subscription.email %></td>
-                        <td>
+                        <td class="actions"> <!-- Add class "actions" -->
                             <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
                             <form action="/subscriptions/delete/<%= subscription._id %>" method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<%= _csrf %>">

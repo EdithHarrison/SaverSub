@@ -17,7 +17,7 @@
             </div>
             <div class="input-group">
                 <label for="monthlyPayment">Monthly Payment:</label>
-                <input type="number" id="monthlyPayment" name="monthlyPayment" value="<%= subscription ? subscription.monthlyPayment : '' %>" required>
+                <input type="number" id="monthlyPayment" name="monthlyPayment" step="0.01" value="<%= subscription ? subscription.monthlyPayment : '' %>" required>
             </div>
             <div class="input-group">
                 <label for="status">Status:</label>
