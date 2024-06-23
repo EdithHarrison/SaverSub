@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const SubscriptionSchema = new mongoose.Schema({
     company: {
@@ -21,17 +22,19 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Entertainment & Leisure', 'Health & Fitness', 'Finance', 'Food', 'Clothing'],
+        enum: ['Entertainment & Leisure', 'Health & Fitness', 'Finance','Food', 'Clothing'],
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide email']
     },
     createdBy: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, 'Please provide user']
-    },
-    email: {
-        type: String,
-        required: [true, 'Please provide email']
     }
 }, { timestamps: true });
+
+SubscriptionSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Subscription', SubscriptionSchema);

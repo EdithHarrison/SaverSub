@@ -8,6 +8,13 @@
         <a href="/subscriptions/new" class="btn btn-primary add-subscription-btn">Add new subscription</a>
     </div>
 
+    <!-- Search Form -->
+    <form action="/subscriptions" method="get" class="search-form">
+        <input type="text" name="search" placeholder="Search by name, payment, category, status, or email" value="<%= searchQuery %>">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="/subscriptions" class="btn btn-secondary">Clear Search</a> <!-- Clear Search Button -->
+    </form>
+
     <% if (subscriptions.length > 0) { %>
         <table class="subscriptions-table">
             <thead>
@@ -26,11 +33,11 @@
                     <tr>
                         <td><%= subscription.company %></td>
                         <td><%= moment(subscription.dueDate).format('YYYY-MM-DD') %></td>
-                        <td>$<%= subscription.monthlyPayment %></td>
+                        <td>$<%= subscription.monthlyPayment.toFixed(2) %></td>
                         <td><%= subscription.status %></td>
                         <td><%= subscription.category %></td>
                         <td><%= subscription.email %></td>
-                        <td>
+                        <td class="actions">
                             <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
                             <form action="/subscriptions/delete/<%= subscription._id %>" method="post" class="inline-form">
                                 <input type="hidden" name="_csrf" value="<%= _csrf %>">
@@ -41,6 +48,22 @@
                 <% }); %>
             </tbody>
         </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&search=<%= searchQuery %>" class="btn btn-secondary">Previous</a>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>&search=<%= searchQuery %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-secondary' %>"><%= i %></a>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&search=<%= searchQuery %>" class="btn btn-secondary">Next</a>
+            <% } %>
+        </div>
+
     <% } else { %>
         <p>No subscriptions found.</p>
     <% } %>
