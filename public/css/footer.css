@@ -1,0 +1,7 @@
+footer {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    width: 100%;
+}
