@@ -1,6 +1,6 @@
 .subscriptions-page {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px; /* Increase max-width to make the table bigger */
     margin: auto;
     overflow-x: auto; 
 }
@@ -32,7 +32,7 @@
 
 .subscriptions-page .subscriptions-table th,
 .subscriptions-page .subscriptions-table td {
-    padding: 10px;
+    padding: 15px; /* Increase padding for bigger cells */
     text-align: left;
     border-bottom: 1px solid #ddd;
     word-wrap: break-word; 
@@ -53,7 +53,7 @@
 
 .subscriptions-page .btn {
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 12px 24px; /* Increase padding for bigger buttons */
     border-radius: 5px;
     font-size: 16px;
     display: inline-block;

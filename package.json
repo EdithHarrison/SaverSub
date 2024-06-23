@@ -22,6 +22,7 @@
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "host-csrf": "^1.0.2",
+    "moment": "^2.30.1",
     "mongodb": "^6.7.0",
     "mongoose": "^8.4.0",
     "node-cron": "^3.0.3",

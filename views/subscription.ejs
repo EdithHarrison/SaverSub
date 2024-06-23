@@ -13,7 +13,7 @@
             </div>
             <div class="input-group">
                 <label for="dueDate">Due Date:</label>
-                <input type="date" id="dueDate" name="dueDate" value="<%= subscription ? subscription.dueDate.toISOString().split('T')[0] : '' %>" required>
+                <input type="date" id="dueDate" name="dueDate" value="<%= subscription ? moment(subscription.dueDate).format('YYYY-MM-DD') : '' %>" required>
             </div>
             <div class="input-group">
                 <label for="monthlyPayment">Monthly Payment:</label>
@@ -36,6 +36,10 @@
                     <option value="Food" <%= subscription && subscription.category === 'Food' ? 'selected' : '' %>>Food</option>
                     <option value="Clothing" <%= subscription && subscription.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
                 </select>
+            </div>
+            <div class="input-group">
+                <label for="email">Notification Email:</label>
+                <input type="email" id="email" name="email" value="<%= subscription ? subscription.email : req.user.email %>" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="btn btn-primary"><%= subscription ? 'Update Subscription' : 'Create Subscription' %></button>

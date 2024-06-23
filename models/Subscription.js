@@ -21,12 +21,16 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Entertainment & Leisure', 'Health & Fitness', 'Finance','Food', 'Clothing'],
+        enum: ['Entertainment & Leisure', 'Health & Fitness', 'Finance', 'Food', 'Clothing'],
     },
     createdBy: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, 'Please provide user']
+    },
+    email: {
+        type: String,
+        required: [true, 'Please provide email']
     }
 }, { timestamps: true });
 

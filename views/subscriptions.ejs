@@ -17,6 +17,7 @@
                     <th>Payment</th>
                     <th>Status</th>
                     <th>Category</th>
+                    <th>Notification Email</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -24,10 +25,11 @@
                 <% subscriptions.forEach(subscription => { %>
                     <tr>
                         <td><%= subscription.company %></td>
-                        <td><%= subscription.dueDate.toDateString() %></td>
+                        <td><%= moment(subscription.dueDate).format('YYYY-MM-DD') %></td>
                         <td>$<%= subscription.monthlyPayment %></td>
                         <td><%= subscription.status %></td>
                         <td><%= subscription.category %></td>
+                        <td><%= subscription.email %></td>
                         <td>
                             <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
                             <form action="/subscriptions/delete/<%= subscription._id %>" method="post" class="inline-form">

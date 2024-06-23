@@ -16,7 +16,7 @@ router
   .get(logonShow)
   .post(
     passport.authenticate("local", {
-      successRedirect: "/subscriptions", // Ensure this is set to /subscriptions
+      successRedirect: "/subscriptions", 
       failureRedirect: "/sessions/logon",
       failureFlash: true,
     })
