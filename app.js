@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const path = require('path');
+const scheduler = require('./Notification/scheduler');
 require("dotenv").config();
 
 const app = express();
@@ -105,13 +106,15 @@ app.use("/subscriptions", auth, (req, res, next) => {
   next();
 }, subscriptions);
 
+// Catch 404 and forward to error handler
 app.use((req, res) => {
   res.status(404).send(`That page (${req.url}) was not found.`);
 });
 
+// Error handler
 app.use((err, req, res, next) => {
   if (err.code === 'EBADCSRFTOKEN') {
-    res.status(500).send('Form tampered with.');
+    res.status(403).send('Form tampered with.');
   } else {
     console.error(err);
     res.status(500).send(err.message);
