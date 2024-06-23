@@ -4,12 +4,48 @@ const csrf = require("host-csrf");
 const moment = require('moment');
 const { notifyUser } = require('../Notification/notificationService');
 
-// Fetch subscriptions for the logged-in user
+/// Fetch subscriptions for the logged-in user
 const getSubscriptions = async (req, res) => {
   try {
-    const subscriptions = await Subscription.find({ createdBy: req.user._id });
+    const searchQuery = req.query.search || '';
+    const userId = req.user._id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+
+    // Define the search criteria
+    const searchCriteria = {
+      createdBy: userId,
+      $or: [
+        { company: { $regex: new RegExp(searchQuery, 'i') } },
+        { category: { $regex: new RegExp(searchQuery, 'i') } },
+        { status: { $regex: new RegExp(searchQuery, 'i') } },
+        { email: { $regex: new RegExp(searchQuery, 'i') } }
+      ]
+    };
+
+    // If searchQuery can be parsed as a number, add monthlyPayment to the criteria
+    const searchNumber = parseFloat(searchQuery);
+    if (!isNaN(searchNumber)) {
+      searchCriteria.$or.push({ monthlyPayment: searchNumber });
+    }
+
+    const options = {
+      page: page,
+      limit: limit,
+      sort: { dueDate: 1 }
+    };
+
+    const result = await Subscription.paginate(searchCriteria, options);
     const token = csrf.token(req, res);
-    res.render("subscriptions", { subscriptions, _csrf: token, moment });
+
+    res.render("subscriptions", {
+      subscriptions: result.docs,
+      totalPages: result.totalPages,
+      currentPage: result.page,
+      searchQuery,
+      _csrf: token,
+      moment
+    });
   } catch (error) {
     console.error("Error fetching subscriptions:", error);
     req.flash("error", "Unable to fetch subscriptions");
@@ -24,18 +60,10 @@ const createSubscription = async (req, res) => {
     req.body.email = req.user.email; // Ensure email is added to the subscription
     req.body.dueDate = moment(req.body.dueDate).toDate(); 
 
-    // Commented out debugging logs
-    // console.log("Creating subscription with due date (raw):", req.body.dueDate);
-    // console.log("Creating subscription with due date (moment):", moment(req.body.dueDate).toISOString());
-
     const subscription = await Subscription.create(req.body);
-
-    // console.log("Created subscription with due date:", subscription.dueDate);
 
     // Check if due date is today
     if (moment(subscription.dueDate).isSame(moment(), 'day')) {
-      // console.log(`Immediate notification for new subscription: ${subscription.company}`);
-      // Use notifyUser for sending a nicely formatted email
       notifyUser(subscription.email, req.user.name, subscription.company);
     }
 
@@ -87,12 +115,8 @@ const updateSubscription = async (req, res) => {
       { new: true }
     );
 
-    // console.log("Updated subscription with due date:", subscription.dueDate);
-
     // Check if due date is today
     if (moment(subscription.dueDate).isSame(moment(), 'day')) {
-      // console.log(`Immediate notification for updated subscription: ${subscription.company}`);
-      // Use notifyUser for sending a nicely formatted email
       notifyUser(subscription.email, req.user.name, subscription.company);
     }
 

@@ -85,5 +85,46 @@
     justify-content: flex-start; 
     align-items: center; 
     white-space: nowrap;
-    width: 160px;
+    width: 180px; /* Adjusted width to fit buttons side by side */
 }
+
+.search-form {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.search-form input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 200px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+}
+
+.pagination .btn-primary {
+    background-color: #6c63ff;
+    color: #fff;
+}
+
+.pagination .btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
