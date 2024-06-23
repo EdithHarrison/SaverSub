@@ -25,7 +25,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(helmet());
 app.use(xss());
 const limiter = rateLimit({
-  max: 100,
+  max: 200,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again after an hour'
 });

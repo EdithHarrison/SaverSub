@@ -1,10 +1,11 @@
 <%- include("partials/head.ejs") %>
+<link rel="stylesheet" href="/css/subscriptions.css">
 <%- include("partials/header.ejs") %>
 
 <main class="subscriptions-page">
     <div class="header-container subscriptions-header">
         <h1>Your Subscriptions</h1>
-        <a href="/subscriptions/new" class="btn btn-primary">Add new subscription</a>
+        <a href="/subscriptions/new" class="btn btn-primary add-subscription-btn">Add new subscription</a>
     </div>
 
     <% if (subscriptions.length > 0) { %>
@@ -30,6 +31,7 @@
                         <td>
                             <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
                             <form action="/subscriptions/delete/<%= subscription._id %>" method="post" class="inline-form">
+                                <input type="hidden" name="_csrf" value="<%= _csrf %>">
                                 <button type="submit" class="btn btn-delete">Delete</button>
                             </form>
                         </td>
