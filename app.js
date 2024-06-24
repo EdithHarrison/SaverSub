@@ -13,7 +13,7 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const path = require('path');
-const scheduler = require('./Notification/scheduler');
+const scheduler = require('./Notification/scheduler'); // Import the scheduler
 require("dotenv").config();
 
 const app = express();
@@ -26,7 +26,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(helmet());
 app.use(xss());
 const limiter = rateLimit({
-  max: 200,
+  max: 500,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again after an hour'
 });
@@ -129,6 +129,7 @@ const start = async () => {
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}...`);
     });
+    scheduler(); // Start the scheduler
   } catch (error) {
     console.error(error);
   }

@@ -4,13 +4,46 @@ const csrf = require("host-csrf");
 const moment = require('moment');
 const { notifyUser } = require('../Notification/notificationService');
 
-/// Fetch subscriptions for the logged-in user
+// Fetch subscriptions for the logged-in user
 const getSubscriptions = async (req, res) => {
   try {
     const searchQuery = req.query.search || '';
     const userId = req.user._id;
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
+
+    const sortField = req.query.sort || 'dueDate';
+    const sortOrder = req.query.order || 'asc';
+    let paymentRange = req.query.paymentRange || '';
+    const status = req.query.status ? (Array.isArray(req.query.status) ? req.query.status : [req.query.status]) : [];
+    const category = req.query.category ? (Array.isArray(req.query.category) ? req.query.category : [req.query.category]) : [];
+    const paymentType = req.query.paymentType ? (Array.isArray(req.query.paymentType) ? req.query.paymentType : [req.query.paymentType]) : [];
+    const paymentCycle = req.query.paymentCycle ? (Array.isArray(req.query.paymentCycle) ? req.query.paymentCycle : [req.query.paymentCycle]) : [];
+
+    // Log paymentRange and its type debugging
+    //console.log("Initial paymentRange:", paymentRange);
+    //console.log("Initial Type of paymentRange:", typeof paymentRange);
+
+    // Ensure paymentRange is a string
+    if (Array.isArray(paymentRange)) {
+      paymentRange = paymentRange[0]; // Use only the first element
+    }
+
+    //console.log("Processed paymentRange:", paymentRange);
+    //console.log("Processed Type of paymentRange:", typeof paymentRange);
+
+    // Parse the payment range
+    let minPayment = 0;
+    let maxPayment = 100;
+
+    const rangeParts = paymentRange.split('-').map(Number);
+    if (rangeParts.length === 2 && !isNaN(rangeParts[0]) && !isNaN(rangeParts[1])) {
+      minPayment = rangeParts[0];
+      maxPayment = rangeParts[1];
+    }
+
+    //console.log("Parsed minPayment:", minPayment);
+    //console.log("Parsed maxPayment:", maxPayment);
 
     // Define the search criteria
     const searchCriteria = {
@@ -20,23 +53,42 @@ const getSubscriptions = async (req, res) => {
         { category: { $regex: new RegExp(searchQuery, 'i') } },
         { status: { $regex: new RegExp(searchQuery, 'i') } },
         { email: { $regex: new RegExp(searchQuery, 'i') } }
-      ]
+      ],
+      monthlyPayment: { $gte: minPayment, $lte: maxPayment }
     };
 
-    // If searchQuery can be parsed as a number, add monthlyPayment to the criteria
-    const searchNumber = parseFloat(searchQuery);
-    if (!isNaN(searchNumber)) {
-      searchCriteria.$or.push({ monthlyPayment: searchNumber });
+    if (status.length) {
+      searchCriteria.status = { $in: status };
+    }
+
+    if (category.length) {
+      searchCriteria.category = { $in: category };
+    }
+
+    if (paymentType.length) {
+      searchCriteria.paymentType = { $in: paymentType };
+    }
+
+    if (paymentCycle.length) {
+      searchCriteria.paymentCycle = { $in: paymentCycle };
     }
 
     const options = {
       page: page,
       limit: limit,
-      sort: { dueDate: 1 }
+      sort: { [sortField]: sortOrder }
     };
 
     const result = await Subscription.paginate(searchCriteria, options);
     const token = csrf.token(req, res);
+
+    // Generate query params for pagination and sorting
+    const queryParams = Object.keys(req.query).map(key => {
+      if (key !== 'page') {
+        return `${key}=${encodeURIComponent(req.query[key])}`;
+      }
+      return null;
+    }).filter(Boolean).join('&');
 
     res.render("subscriptions", {
       subscriptions: result.docs,
@@ -44,7 +96,15 @@ const getSubscriptions = async (req, res) => {
       currentPage: result.page,
       searchQuery,
       _csrf: token,
-      moment
+      moment,
+      sort: req.query.sort || '',
+      order: req.query.order || '',
+      queryParams,
+      paymentRange,
+      status: req.query.status || '',
+      category: req.query.category || '',
+      paymentType: req.query.paymentType || '',
+      paymentCycle: req.query.paymentCycle || ''
     });
   } catch (error) {
     console.error("Error fetching subscriptions:", error);
@@ -52,7 +112,6 @@ const getSubscriptions = async (req, res) => {
     res.redirect("/");
   }
 };
-
 // Create a new subscription
 const createSubscription = async (req, res) => {
   try {

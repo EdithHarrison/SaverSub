@@ -35,6 +35,39 @@
                     <option value="Finance" <%= subscription && subscription.category === 'Finance' ? 'selected' : '' %>>Finance</option>
                     <option value="Food" <%= subscription && subscription.category === 'Food' ? 'selected' : '' %>>Food</option>
                     <option value="Clothing" <%= subscription && subscription.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+                    <option value="Utilities" <%= subscription && subscription.category === 'Utilities' ? 'selected' : '' %>>Utilities</option>
+                    <option value="Housing" <%= subscription && subscription.category === 'Housing' ? 'selected' : '' %>>Housing</option>
+                    <option value="Software & Tools" <%= subscription && subscription.category === 'Software & Tools' ? 'selected' : '' %>>Software & Tools</option>
+                    <option value="Streaming Services" <%= subscription && subscription.category === 'Streaming Services' ? 'selected' : '' %>>Streaming Services</option>
+                    <option value="Education & Learning" <%= subscription && subscription.category === 'Education & Learning' ? 'selected' : '' %>>Education & Learning</option>
+                    <option value="Transportation" <%= subscription && subscription.category === 'Transportation' ? 'selected' : '' %>>Transportation</option>
+                    <option value="Telecommunications" <%= subscription && subscription.category === 'Telecommunications' ? 'selected' : '' %>>Telecommunications</option>
+                    <option value="Insurance" <%= subscription && subscription.category === 'Insurance' ? 'selected' : '' %>>Insurance</option>
+                    <option value="Retail & Shopping" <%= subscription && subscription.category === 'Retail & Shopping' ? 'selected' : '' %>>Retail & Shopping</option>
+                    <option value="Travel & Leisure" <%= subscription && subscription.category === 'Travel & Leisure' ? 'selected' : '' %>>Travel & Leisure</option>
+                    <option value="Gaming" <%= subscription && subscription.category === 'Gaming' ? 'selected' : '' %>>Gaming</option>
+                    <option value="Health & Wellness" <%= subscription && subscription.category === 'Health & Wellness' ? 'selected' : '' %>>Health & Wellness</option>
+                    <option value="Home Services" <%= subscription && subscription.category === 'Home Services' ? 'selected' : '' %>>Home Services</option>
+                    <option value="Financial Services" <%= subscription && subscription.category === 'Financial Services' ? 'selected' : '' %>>Financial Services</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="paymentType">Payment Type:</label>
+                <select id="paymentType" name="paymentType">
+                    <option value="one-time" <%= subscription && subscription.paymentType === 'one-time' ? 'selected' : '' %>>One-Time</option>
+                    <option value="recurring" <%= subscription && subscription.paymentType === 'recurring' ? 'selected' : '' %>>Recurring</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="paymentCycle">Payment Cycle:</label>
+                <select id="paymentCycle" name="paymentCycle">
+                    <option value="daily" <%= subscription && subscription.paymentCycle === 'daily' ? 'selected' : '' %>>Daily</option>
+                    <option value="weekly" <%= subscription && subscription.paymentCycle === 'weekly' ? 'selected' : '' %>>Weekly</option>
+                    <option value="monthly" <%= subscription && subscription.paymentCycle === 'monthly' ? 'selected' : '' %>>Monthly</option>
+                    <option value="quarterly" <%= subscription && subscription.paymentCycle === 'quarterly' ? 'selected' : '' %>>Quarterly</option>
+                    <option value="biannually" <%= subscription && subscription.paymentCycle === 'biannually' ? 'selected' : '' %>>Biannually</option>
+                    <option value="annually" <%= subscription && subscription.paymentCycle === 'annually' ? 'selected' : '' %>>Annually</option>
+                    <option value="manual" <%= subscription && subscription.paymentCycle === 'manual' ? 'selected' : '' %>>Manual</option>
                 </select>
             </div>
             <div class="input-group">

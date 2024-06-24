@@ -3,29 +3,183 @@
 <%- include("partials/header.ejs") %>
 
 <main class="subscriptions-page">
-    <div class="header-container subscriptions-header">
-        <h1>Your Subscriptions</h1>
-        <a href="/subscriptions/new" class="btn btn-primary add-subscription-btn">Add new subscription</a>
+    <div class="header-container">
+        <div class="subscriptions-header">
+            <h1>Your Subscriptions</h1>
+        </div>
+        <div class="header-middle"></div>
+        <div class="header-button">
+            <a href="/subscriptions/new" class="btn add-subscription-btn">Add new subscription</a>
+        </div>
     </div>
 
-    <!-- Search Form -->
     <form action="/subscriptions" method="get" class="search-form">
-        <input type="text" name="search" placeholder="Search by name, payment, category, status, or email" value="<%= searchQuery %>">
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a href="/subscriptions" class="btn btn-secondary">Clear Search</a> <!-- Clear Search Button -->
+        <div class="search-field-container">
+            <input type="text" name="search" class="search-field" placeholder="Search by name, payment, category, status, or email" value="<%= searchQuery %>">
+        </div>
+        <div class="search-buttons">
+            <button type="submit" class="search-btn">Search</button>
+            <a href="/subscriptions" class="search-btn">Clear Search</a>
+        </div>
+        <div class="empty-box"></div>
+        <div class="empty-box"></div>
     </form>
 
     <% if (subscriptions.length > 0) { %>
         <table class="subscriptions-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Due Date</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Category</th>
+                    <th>Name
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <label><input type="checkbox" name="sort" value="company" <%= sort === 'company' && order === 'asc' ? 'checked' : '' %>> A-Z</label>
+                                    <label><input type="checkbox" name="sort" value="company" <%= sort === 'company' && order === 'desc' ? 'checked' : '' %>> Z-A</label>
+                                    <input type="hidden" name="order" value="<%= order === 'asc' ? 'desc' : 'asc' %>">
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Due Date
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <label><input type="checkbox" name="sort" value="dueDate" <%= sort === 'dueDate' && order === 'asc' ? 'checked' : '' %>> Earliest First</label>
+                                    <label><input type="checkbox" name="sort" value="dueDate" <%= sort === 'dueDate' && order === 'desc' ? 'checked' : '' %>> Latest First</label>
+                                    <input type="hidden" name="order" value="<%= order === 'asc' ? 'desc' : 'asc' %>">
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Payment
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <select name="paymentRange" id="paymentRange">
+                                        <option value="">Select Payment Range</option>
+                                        <option value="0-20" <%= paymentRange === '0-20' ? 'selected' : '' %>>$0-20</option>
+                                        <option value="21-40" <%= paymentRange === '21-40' ? 'selected' : '' %>>$21-40</option>
+                                        <option value="41-60" <%= paymentRange === '41-60' ? 'selected' : '' %>>$41-60</option>
+                                        <option value="61-80" <%= paymentRange === '61-80' ? 'selected' : '' %>>$61-80</option>
+                                        <option value="81-100" <%= paymentRange === '81-100' ? 'selected' : '' %>>$81-100</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="sort" value="<%= sort %>">
+                                    <input type="hidden" name="order" value="<%= order %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Status
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <% for (const stat of ['free trial', 'active', 'canceled']) { %>
+                                        <label><input type="checkbox" name="status" value="<%= stat %>" <%= status.includes(stat) ? 'checked' : '' %>> <%= stat %></label>
+                                    <% } %>
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="sort" value="<%= sort %>">
+                                    <input type="hidden" name="order" value="<%= order %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Category
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <% for (const cat of ['Entertainment & Leisure', 'Health & Fitness', 'Finance', 'Food', 'Clothing', 'Utilities', 'Housing', 'Software & Tools', 'Streaming Services', 'Education & Learning', 'Transportation', 'Telecommunications', 'Insurance', 'Retail & Shopping', 'Travel & Leisure', 'Gaming', 'Health & Wellness', 'Home Services', 'Financial Services']) { %>
+                                        <label><input type="checkbox" name="category" value="<%= cat %>" <%= category.includes(cat) ? 'checked' : '' %>> <%= cat %></label>
+                                    <% } %>
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="sort" value="<%= sort %>">
+                                    <input type="hidden" name="order" value="<%= order %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Payment Type
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <label><input type="checkbox" name="paymentType" value="one-time" <%= paymentType.includes('one-time') ? 'checked' : '' %>> One-Time</label>
+                                    <label><input type="checkbox" name="paymentType" value="recurring" <%= paymentType.includes('recurring') ? 'checked' : '' %>> Recurring</label>
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="sort" value="<%= sort %>">
+                                    <input type="hidden" name="order" value="<%= order %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
+                    <th>Payment Cycle
+                        <div class="dropdown">
+                            <button class="dropbtn"></button>
+                            <div class="dropdown-content">
+                                <form action="/subscriptions" method="get">
+                                    <% for (const cycle of ['daily', 'weekly', 'monthly', 'quarterly', 'biyearly', 'yearly', 'manually']) { %>
+                                        <label><input type="checkbox" name="paymentCycle" value="<%= cycle %>" <%= paymentCycle.includes(cycle) ? 'checked' : '' %>> <%= cycle %></label>
+                                    <% } %>
+                                    <button type="submit" class="btn btn-primary">Apply</button>
+                                    <input type="hidden" name="search" value="<%= searchQuery %>">
+                                    <input type="hidden" name="sort" value="<%= sort %>">
+                                    <input type="hidden" name="order" value="<%= order %>">
+                                    <input type="hidden" name="category" value="<%= category %>">
+                                    <input type="hidden" name="status" value="<%= status %>">
+                                    <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
+                                    <input type="hidden" name="paymentType" value="<%= paymentType %>">
+                                    <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                </form>
+                            </div>
+                        </div>
+                    </th>
                     <th>Notification Email</th>
-                    <th>Actions</th>
+                    <th>
+                        <a href="/subscriptions" class="btn btn-clear-filter">Clear Filter</a>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +190,8 @@
                         <td>$<%= subscription.monthlyPayment.toFixed(2) %></td>
                         <td><%= subscription.status %></td>
                         <td><%= subscription.category %></td>
+                        <td><%= subscription.paymentType %></td>
+                        <td><%= subscription.paymentCycle %></td>
                         <td><%= subscription.email %></td>
                         <td class="actions">
                             <a href="/subscriptions/edit/<%= subscription._id %>" class="btn btn-edit">Edit</a>
@@ -52,15 +208,15 @@
         <!-- Pagination Controls -->
         <div class="pagination">
             <% if (currentPage > 1) { %>
-                <a href="?page=<%= currentPage - 1 %>&search=<%= searchQuery %>" class="btn btn-secondary">Previous</a>
+                <a href="?page=<%= currentPage - 1 %>&<%= queryParams %>" class="btn btn-secondary">Previous</a>
             <% } %>
 
             <% for (let i = 1; i <= totalPages; i++) { %>
-                <a href="?page=<%= i %>&search=<%= searchQuery %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-secondary' %>"><%= i %></a>
+                <a href="?page=<%= i %>&<%= queryParams %>" class="btn <%= i === currentPage ? 'btn-primary' : 'btn-secondary' %>"><%= i %></a>
             <% } %>
 
             <% if (currentPage < totalPages) { %>
-                <a href="?page=<%= currentPage + 1 %>&search=<%= searchQuery %>" class="btn btn-secondary">Next</a>
+                <a href="?page=<%= currentPage + 1 %>&<%= queryParams %>" class="btn btn-secondary">Next</a>
             <% } %>
         </div>
 
