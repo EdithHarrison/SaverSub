@@ -22,7 +22,27 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Entertainment & Leisure', 'Health & Fitness', 'Finance','Food', 'Clothing'],
+        enum: [
+            'Entertainment & Leisure',
+            'Health & Fitness',
+            'Finance',
+            'Food',
+            'Clothing',
+            'Utilities',
+            'Housing',
+            'Software & Tools',
+            'Streaming Services',
+            'Education & Learning',
+            'Transportation',
+            'Telecommunications',
+            'Insurance',
+            'Retail & Shopping',
+            'Travel & Leisure',
+            'Gaming',
+            'Health & Wellness',
+            'Home Services',
+            'Financial Services'
+        ]
     },
     email: {
         type: String,
@@ -32,6 +52,19 @@ const SubscriptionSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, 'Please provide user']
+    },
+    paymentType: {
+        type: String,
+        enum: ['one-time', 'recurring'],
+        default: 'recurring'
+    },
+    paymentCycle: {
+        type: String,
+        enum: ['daily', 'weekly', 'monthly', 'quarterly', 'biyearly', 'yearly', 'manually'],
+        default: 'monthly'
+    },
+    lastNotified: {
+        type: Date
     }
 }, { timestamps: true });
 

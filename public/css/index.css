@@ -66,7 +66,7 @@ header {
 }
 
 .index-page .hero h1 span {
-    color: #6c63ff;
+    color: #3A5298;
 }
 
 .index-page .hero p {
@@ -90,7 +90,7 @@ header {
     text-align: center;
     text-decoration: none;
     color: #ffffff;
-    background-color: #6200ea;
+    background-color: #3A5298;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -98,24 +98,24 @@ header {
 }
 
 .btn:hover {
-    background-color: #4500b5;
+    background-color: #3A5298;
     transform: scale(1.05);
 }
 
 .btn-primary {
-    background-color: #6200ea;
+    background-color: #3A5298;
 }
 
 .btn-primary:hover {
-    background-color: #4500b5;
+    background-color: #3A5298;
 }
 
 .btn-secondary {
-    background-color: #6200ea;
+    background-color: #3A5298;
 }
 
 .btn-secondary:hover {
-    background-color: #4500b5;
+    background-color: #3A5298;
 }
 
 .btn:disabled {

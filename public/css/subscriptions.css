@@ -1,130 +1,218 @@
 .subscriptions-page {
-    width: 100%;
-    max-width: 1400px; /* Increase max-width to make the table bigger */
-    margin: auto;
-    overflow-x: auto; 
+    padding: 20px;
 }
 
-.subscriptions-page .header-container {
+.header-container {
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.subscriptions-page h1 {
-    text-align: center;
-    margin-bottom: 10px; 
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.subscriptions-page .add-subscription-btn {
-    margin-top: 10px; 
-}
-
-.subscriptions-page .subscriptions-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    table-layout: fixed; 
-}
-
-.subscriptions-page .subscriptions-table th,
-.subscriptions-page .subscriptions-table td {
-    padding: 10px; /* Increase padding for bigger cells */
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    word-wrap: break-word; 
-}
-
-.subscriptions-page .subscriptions-table th {
-    background-color: #f0f4ff;
-    font-weight: bold;
-}
-
-.subscriptions-page .subscriptions-table td {
-    background-color: #ffffff;
-}
-
-.subscriptions-page .subscriptions-table tr:nth-child(even) td {
-    background-color: #f9f9f9;
-}
-
-.subscriptions-page .btn {
-    text-decoration: none;
-    padding: 12px 24px; /* Increase padding for bigger buttons */
-    border-radius: 5px;
-    font-size: 16px;
-    display: inline-block;
-    text-align: center;
-    cursor: pointer;
-    border: none; 
-    background-color: #6c63ff;
-    color: #fff;
-}
-
-.subscriptions-page .btn-edit {
-    background-color: #4caf50;
-    color: #fff;
-    margin-right: 5px;
-}
-
-.subscriptions-page .btn-delete {
-    background-color: #f44336;
-    color: #fff;
-}
-
-.subscriptions-page .inline-form {
-    display: inline;
-}
-
-.subscriptions-page .actions {
+.subscriptions-header {
     display: flex;
-    gap: 5px; 
-    justify-content: flex-start; 
-    align-items: center; 
-    white-space: nowrap;
-    width: 180px; /* Adjusted width to fit buttons side by side */
+    align-items: center;
+    flex: 1;
+}
+
+.subscriptions-header h1 {
+    margin: 0;
+    font-size: 24px;
+    text-align: left;
+}
+
+.header-button {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.header-button .add-subscription-btn {
+    background-color: #3A5298;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px; /
 }
 
 .search-form {
-    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
-.search-form input[type="text"] {
-    padding: 10px;
+.search-field-container {
+    flex: 1.5;
+    padding-right: 10px;
+}
+
+.search-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-buttons {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.search-btn {
+    flex: 1;
+    margin-left: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #3A5298;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px; 
+}
+
+.search-btn:first-child {
+    margin-left: 0;
+}
+
+.empty-box {
+    flex: 1;
+}
+
+.subscriptions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.subscriptions-table th, .subscriptions-table td {
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    width: 200px;
+    padding: 8px;
+    text-align: left;
+}
+
+.subscriptions-table th {
+    background-color: #f8f9fa;
+}
+
+.subscriptions-table .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.subscriptions-table .dropdown .dropbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.subscriptions-table .dropdown .dropbtn:after {
+    content: '▼';
+    margin-left: 5px;
+}
+
+.subscriptions-table .dropdown .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.subscriptions-table .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.subscriptions-table .dropdown .dropdown-content form {
+    padding: 12px 16px;
+}
+
+.subscriptions-table .dropdown .dropdown-content form label {
+    display: block;
+    margin: 5px 0;
+    font-weight: normal; 
+}
+
+.subscriptions-table .dropdown .dropdown-content form button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #3A5298;
+    color: white;
+    font-weight: normal;
 }
 
 .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    gap: 10px;
 }
 
 .pagination .btn {
-    padding: 10px 20px;
-    font-size: 16px;
+    margin: 0 5px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
     text-decoration: none;
-    border-radius: 5px;
-    border: none;
+    color: white;
+    background-color: #3A5298;
+    font-weight: normal;
 }
 
 .pagination .btn-primary {
-    background-color: #6c63ff;
-    color: #fff;
+    background-color: #3A5298;
+    color: white;
 }
 
 .pagination .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f8f9fa;
+    color: black;
 }
 
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.actions .btn {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.actions .btn-edit {
+    background-color: #00bf63; 
+    color: white;
+}
+
+.actions .btn-delete {
+    background-color: #ff5757; 
+    color: white;
+}
+
+.btn-clear-filter {
+    background-color: #3A5298; 
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px; 
+}
