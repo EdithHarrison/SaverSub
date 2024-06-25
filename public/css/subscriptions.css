@@ -224,3 +224,15 @@
     vertical-align: middle;
 }
 
+.subscriptions-table tr {
+    transition: background-color 0.3s ease;
+}
+
+.subscriptions-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.company-url {
+    background-color: #f9f9f9;
+    text-align: center;
+}
