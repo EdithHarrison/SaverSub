@@ -2,6 +2,7 @@ const Subscription = require('../models/Subscription');
 const parseVErr = require("../util/parseValidationErr");
 const csrf = require("host-csrf");
 const moment = require('moment');
+const fetchCompanyData = require('../services/fetchCompanyData');
 const { notifyUser } = require('../Notification/notificationService');
 
 // Fetch subscriptions for the logged-in user
@@ -20,17 +21,10 @@ const getSubscriptions = async (req, res) => {
     const paymentType = req.query.paymentType ? (Array.isArray(req.query.paymentType) ? req.query.paymentType : [req.query.paymentType]) : [];
     const paymentCycle = req.query.paymentCycle ? (Array.isArray(req.query.paymentCycle) ? req.query.paymentCycle : [req.query.paymentCycle]) : [];
 
-    // Log paymentRange and its type debugging
-    //console.log("Initial paymentRange:", paymentRange);
-    //console.log("Initial Type of paymentRange:", typeof paymentRange);
-
     // Ensure paymentRange is a string
     if (Array.isArray(paymentRange)) {
-      paymentRange = paymentRange[0]; // Use only the first element
+      paymentRange = paymentRange[0];
     }
-
-    //console.log("Processed paymentRange:", paymentRange);
-    //console.log("Processed Type of paymentRange:", typeof paymentRange);
 
     // Parse the payment range
     let minPayment = 0;
@@ -41,9 +35,6 @@ const getSubscriptions = async (req, res) => {
       minPayment = rangeParts[0];
       maxPayment = rangeParts[1];
     }
-
-    //console.log("Parsed minPayment:", minPayment);
-    //console.log("Parsed maxPayment:", maxPayment);
 
     // Define the search criteria
     const searchCriteria = {
@@ -112,12 +103,21 @@ const getSubscriptions = async (req, res) => {
     res.redirect("/");
   }
 };
-// Create a new subscription
+
 const createSubscription = async (req, res) => {
   try {
     req.body.createdBy = req.user._id;
     req.body.email = req.user.email; // Ensure email is added to the subscription
-    req.body.dueDate = moment(req.body.dueDate).toDate(); 
+    req.body.dueDate = moment(req.body.dueDate).toDate();
+
+    // Fetch company information from the JSON file on Google Drive
+    const companyData = await fetchCompanyData(req.body.email);
+
+    if (companyData.length > 0) {
+      req.body.company = companyData[0].name || req.body.company;
+      req.body.companyLogo = companyData[0].logo || req.body.companyLogo;
+      req.body.companyUrl = companyData[0].website || req.body.companyUrl;
+    }
 
     const subscription = await Subscription.create(req.body);
 
@@ -132,7 +132,7 @@ const createSubscription = async (req, res) => {
     if (error.constructor.name === "ValidationError") {
       parseVErr(error, req);
       const token = csrf.token(req, res);
-      res.render("subscription", { subscription: null, errors: req.flash("error"), _csrf: token, moment, req });
+      res.render("subscription", { subscription: null, errors: req.flash("error"), _csrf: token, moment, companyData: [], req });
     } else {
       console.error("Error creating subscription:", error);
       req.flash("error", "Error creating subscription");
@@ -141,22 +141,44 @@ const createSubscription = async (req, res) => {
   }
 };
 
+
 // Render the form to create a new subscription
-const getSubscriptionForm = (req, res) => {
-  const token = csrf.token(req, res);
-  res.render("subscription", { subscription: null, _csrf: token, moment, req });
+const getSubscriptionForm = async (req, res) => {
+  try {
+    const token = csrf.token(req, res);
+
+    // Fetch company data for autocomplete suggestions
+    const companyData = await fetchCompanyData('');
+
+    res.render("subscription", { subscription: null, _csrf: token, moment, companyData, req });
+  } catch (error) {
+    console.error("Error fetching company data:", error);
+    req.flash("error", "Unable to fetch company data");
+    res.redirect("/subscriptions");
+  }
 };
 
 // Render the form to edit an existing subscription
 const editSubscriptionForm = async (req, res) => {
   try {
-    const subscription = await Subscription.findOne({ _id: req.params.id, createdBy: req.user._id });
+    const subscriptionId = req.params.id;  // Ensure the _id is correctly extracted
+    if (!subscriptionId) {
+      req.flash("error", "Subscription ID is missing");
+      return res.redirect("/subscriptions");
+    }
+    
+    const subscription = await Subscription.findOne({ _id: subscriptionId, createdBy: req.user._id });
     if (!subscription) {
       req.flash("error", "Subscription not found");
       return res.redirect("/subscriptions");
     }
+
     const token = csrf.token(req, res);
-    res.render("subscription", { subscription, _csrf: token, moment, req });
+
+    // Fetch company data for autocomplete suggestions
+    const companyData = await fetchCompanyData('');
+
+    res.render("subscription", { subscription, _csrf: token, moment, companyData, req });
   } catch (error) {
     console.error("Error fetching subscription:", error);
     req.flash("error", "Error fetching subscription");
@@ -164,10 +186,19 @@ const editSubscriptionForm = async (req, res) => {
   }
 };
 
-// Update an existing subscription
 const updateSubscription = async (req, res) => {
   try {
     req.body.dueDate = moment(req.body.dueDate).toDate();
+
+    // Fetch company information from the JSON file on Google Drive
+    const companyData = await fetchCompanyData(req.body.email);
+
+    if (companyData.length > 0) {
+      req.body.company = companyData[0].name || req.body.company;
+      req.body.companyLogo = companyData[0].logo || req.body.companyLogo;
+      req.body.companyUrl = companyData[0].website || req.body.companyUrl;
+    }
+
     const subscription = await Subscription.findOneAndUpdate(
       { _id: req.params.id, createdBy: req.user._id },
       { ...req.body, email: req.user.email }, // Ensure email is updated if necessary
@@ -185,7 +216,7 @@ const updateSubscription = async (req, res) => {
     if (error.constructor.name === "ValidationError") {
       parseVErr(error, req);
       const token = csrf.token(req, res);
-      res.render("subscription", { subscription: req.body, errors: req.flash("error"), _csrf: token, moment, req });
+      res.render("subscription", { subscription: req.body, errors: req.flash("error"), _csrf: token, moment, companyData: [], req });
     } else {
       console.error("Error updating subscription:", error);
       req.flash("error", "Error updating subscription");
@@ -193,6 +224,7 @@ const updateSubscription = async (req, res) => {
     }
   }
 };
+
 
 // Delete a subscription
 const deleteSubscription = async (req, res) => {

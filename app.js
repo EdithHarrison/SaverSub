@@ -13,7 +13,8 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 const path = require('path');
-const scheduler = require('./Notification/scheduler'); // Import the scheduler
+const scheduler = require('./Notification/scheduler'); 
+const axios = require('axios'); 
 require("dotenv").config();
 
 const app = express();
@@ -92,6 +93,26 @@ app.use((req, res, next) => {
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Proxy route for images
+app.get('/proxy-image', async (req, res) => {
+    const { url } = req.query;
+
+    if (!url) {
+        return res.status(400).send('No URL provided');
+    }
+
+    try {
+        const response = await axios.get(url, { responseType: 'arraybuffer' });
+        const contentType = response.headers['content-type'];
+
+        res.setHeader('Content-Type', contentType);
+        res.send(response.data);
+    } catch (error) {
+        console.error('Error fetching image:', error.message);
+        res.status(500).send('Error fetching image');
+    }
+});
 
 app.get("/", (req, res) => {
   res.render("index", { page: 'index', user: req.user });

@@ -9,7 +9,23 @@
             <input type="hidden" name="_csrf" value="<%= _csrf %>">
             <div class="input-group">
                 <label for="company">Company:</label>
-                <input type="text" id="company" name="company" value="<%= subscription ? subscription.company : '' %>" required>
+                <input type="text" id="company" name="company" value="<%= subscription ? subscription.company : '' %>" required autocomplete="off">
+                <div id="company-suggestions" class="suggestions-box" style="display: none;">
+                    <% if (typeof companyData !== 'undefined' && companyData.length > 0) { %>
+                        <% companyData.forEach(company => { %>
+                            <div class="suggestion-item" data-name="<%= company.name %>" data-logo="/proxy-image?url=<%= encodeURIComponent(company.logo) %>" data-url="<%= company.website %>">
+                                <img src="/proxy-image?url=<%= encodeURIComponent(company.logo) %>" alt="<%= company.name %> logo" class="suggestion-logo">
+                                <span class="suggestion-name"><%= company.name %></span>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="suggestion-item">No companies available</div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="companyUrl">Company URL:</label>
+                <input type="text" id="companyUrl" name="companyUrl" value="<%= subscription ? subscription.companyUrl : '' %>" required>
             </div>
             <div class="input-group">
                 <label for="dueDate">Due Date:</label>
@@ -83,3 +99,4 @@
 </main>
 
 <%- include("partials/footer.ejs") %>
+<script src="/js/companyAutocomplete.js"></script>
