@@ -185,7 +185,10 @@
             <tbody>
                 <% subscriptions.forEach(subscription => { %>
                     <tr>
-                        <td><%= subscription.company %></td>
+                        <td>
+                            <img src="<%= subscription.companyLogo %>" alt="Company Logo" class="company-logo">
+                            <%= subscription.company %>
+                        </td>
                         <td><%= moment(subscription.dueDate).format('YYYY-MM-DD') %></td>
                         <td>$<%= subscription.monthlyPayment.toFixed(2) %></td>
                         <td><%= subscription.status %></td>

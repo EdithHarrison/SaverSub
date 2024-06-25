@@ -7,6 +7,15 @@ const SubscriptionSchema = new mongoose.Schema({
         required: [true, 'Please provide company name'],
         maxlength: 50
     },
+
+    companyLogo: {
+        type: String
+
+    },
+    companyUrl: {
+        type: String
+
+    },
     dueDate: {
         type: Date,
         required: [true, 'Please provide due date']
