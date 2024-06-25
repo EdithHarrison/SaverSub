@@ -72,14 +72,8 @@
                             <button class="dropbtn"></button>
                             <div class="dropdown-content">
                                 <form action="/subscriptions" method="get">
-                                    <select name="paymentRange" id="paymentRange">
-                                        <option value="">Select Payment Range</option>
-                                        <option value="0-20" <%= paymentRange === '0-20' ? 'selected' : '' %>>$0-20</option>
-                                        <option value="21-40" <%= paymentRange === '21-40' ? 'selected' : '' %>>$21-40</option>
-                                        <option value="41-60" <%= paymentRange === '41-60' ? 'selected' : '' %>>$41-60</option>
-                                        <option value="61-80" <%= paymentRange === '61-80' ? 'selected' : '' %>>$61-80</option>
-                                        <option value="81-100" <%= paymentRange === '81-100' ? 'selected' : '' %>>$81-100</option>
-                                    </select>
+                                    <label for="paymentRange">Payment Range: $<span id="paymentRangeLabel"><%= paymentRange %></span></label>
+                                    <input type="range" id="paymentRange" name="paymentRange" min="0" max="100" value="<%= paymentRange %>">
                                     <button type="submit" class="btn btn-primary">Apply</button>
                                     <input type="hidden" name="search" value="<%= searchQuery %>">
                                     <input type="hidden" name="sort" value="<%= sort %>">
@@ -184,11 +178,8 @@
             </thead>
             <tbody>
                 <% subscriptions.forEach(subscription => { %>
-                    <tr>
-                        <td>
-                            <img src="<%= subscription.companyLogo %>" alt="Company Logo" class="company-logo">
-                            <%= subscription.company %>
-                        </td>
+                    <tr class="subscription-row" data-id="<%= subscription._id %>" style="cursor: pointer;">
+                        <td><%= subscription.company %></td>
                         <td><%= moment(subscription.dueDate).format('YYYY-MM-DD') %></td>
                         <td>$<%= subscription.monthlyPayment.toFixed(2) %></td>
                         <td><%= subscription.status %></td>
@@ -202,6 +193,11 @@
                                 <input type="hidden" name="_csrf" value="<%= _csrf %>">
                                 <button type="submit" class="btn btn-delete">Delete</button>
                             </form>
+                        </td>
+                    </tr>
+                    <tr id="company-url-<%= subscription._id %>" class="company-url" style="display:none;">
+                        <td colspan="9">
+                            <a href="<%= subscription.companyUrl %>" target="_blank"><%= subscription.companyUrl %></a>
                         </td>
                     </tr>
                 <% }); %>
@@ -229,3 +225,5 @@
 </main>
 
 <%- include("partials/footer.ejs") %>
+
+<script src="/js/subscriptions.js"></script>

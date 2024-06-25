@@ -5,109 +5,92 @@ const moment = require('moment');
 const fetchCompanyData = require('../services/fetchCompanyData');
 const { notifyUser } = require('../Notification/notificationService');
 
-// Fetch subscriptions for the logged-in user
 const getSubscriptions = async (req, res) => {
   try {
-    const searchQuery = req.query.search || '';
-    const userId = req.user._id;
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+      const searchQuery = req.query.search || '';
+      const userId = req.user._id;
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10;
 
-    const sortField = req.query.sort || 'dueDate';
-    const sortOrder = req.query.order || 'asc';
-    let paymentRange = req.query.paymentRange || '';
-    const status = req.query.status ? (Array.isArray(req.query.status) ? req.query.status : [req.query.status]) : [];
-    const category = req.query.category ? (Array.isArray(req.query.category) ? req.query.category : [req.query.category]) : [];
-    const paymentType = req.query.paymentType ? (Array.isArray(req.query.paymentType) ? req.query.paymentType : [req.query.paymentType]) : [];
-    const paymentCycle = req.query.paymentCycle ? (Array.isArray(req.query.paymentCycle) ? req.query.paymentCycle : [req.query.paymentCycle]) : [];
+      const sortField = req.query.sort || 'dueDate';
+      const sortOrder = req.query.order || 'asc';
+      const paymentRange = parseInt(req.query.paymentRange) || 100;
+      const status = req.query.status ? (Array.isArray(req.query.status) ? req.query.status : [req.query.status]) : [];
+      const category = req.query.category ? (Array.isArray(req.query.category) ? req.query.category : [req.query.category]) : [];
+      const paymentType = req.query.paymentType ? (Array.isArray(req.query.paymentType) ? req.query.paymentType : [req.query.paymentType]) : [];
+      const paymentCycle = req.query.paymentCycle ? (Array.isArray(req.query.paymentCycle) ? req.query.paymentCycle : [req.query.paymentCycle]) : [];
 
-    // Ensure paymentRange is a string
-    if (Array.isArray(paymentRange)) {
-      paymentRange = paymentRange[0];
-    }
+      const searchCriteria = {
+          createdBy: userId,
+          $or: [
+              { company: { $regex: new RegExp(searchQuery, 'i') } },
+              { category: { $regex: new RegExp(searchQuery, 'i') } },
+              { status: { $regex: new RegExp(searchQuery, 'i') } },
+              { email: { $regex: new RegExp(searchQuery, 'i') } }
+          ],
+          monthlyPayment: { $lte: paymentRange }
+      };
 
-    // Parse the payment range
-    let minPayment = 0;
-    let maxPayment = 100;
-
-    const rangeParts = paymentRange.split('-').map(Number);
-    if (rangeParts.length === 2 && !isNaN(rangeParts[0]) && !isNaN(rangeParts[1])) {
-      minPayment = rangeParts[0];
-      maxPayment = rangeParts[1];
-    }
-
-    // Define the search criteria
-    const searchCriteria = {
-      createdBy: userId,
-      $or: [
-        { company: { $regex: new RegExp(searchQuery, 'i') } },
-        { category: { $regex: new RegExp(searchQuery, 'i') } },
-        { status: { $regex: new RegExp(searchQuery, 'i') } },
-        { email: { $regex: new RegExp(searchQuery, 'i') } }
-      ],
-      monthlyPayment: { $gte: minPayment, $lte: maxPayment }
-    };
-
-    if (status.length) {
-      searchCriteria.status = { $in: status };
-    }
-
-    if (category.length) {
-      searchCriteria.category = { $in: category };
-    }
-
-    if (paymentType.length) {
-      searchCriteria.paymentType = { $in: paymentType };
-    }
-
-    if (paymentCycle.length) {
-      searchCriteria.paymentCycle = { $in: paymentCycle };
-    }
-
-    const options = {
-      page: page,
-      limit: limit,
-      sort: { [sortField]: sortOrder }
-    };
-
-    const result = await Subscription.paginate(searchCriteria, options);
-    const token = csrf.token(req, res);
-
-    // Generate query params for pagination and sorting
-    const queryParams = Object.keys(req.query).map(key => {
-      if (key !== 'page') {
-        return `${key}=${encodeURIComponent(req.query[key])}`;
+      if (status.length) {
+          searchCriteria.status = { $in: status };
       }
-      return null;
-    }).filter(Boolean).join('&');
 
-    res.render("subscriptions", {
-      subscriptions: result.docs,
-      totalPages: result.totalPages,
-      currentPage: result.page,
-      searchQuery,
-      _csrf: token,
-      moment,
-      sort: req.query.sort || '',
-      order: req.query.order || '',
-      queryParams,
-      paymentRange,
-      status: req.query.status || '',
-      category: req.query.category || '',
-      paymentType: req.query.paymentType || '',
-      paymentCycle: req.query.paymentCycle || ''
-    });
+      if (category.length) {
+          searchCriteria.category = { $in: category };
+      }
+
+      if (paymentType.length) {
+          searchCriteria.paymentType = { $in: paymentType };
+      }
+
+      if (paymentCycle.length) {
+          searchCriteria.paymentCycle = { $in: paymentCycle };
+      }
+
+      const options = {
+          page: page,
+          limit: limit,
+          sort: { [sortField]: sortOrder }
+      };
+
+      const result = await Subscription.paginate(searchCriteria, options);
+      const token = csrf.token(req, res);
+
+      // Generate query params for pagination and sorting
+      const queryParams = Object.keys(req.query).map(key => {
+          if (key !== 'page') {
+              return `${key}=${encodeURIComponent(req.query[key])}`;
+          }
+          return null;
+      }).filter(Boolean).join('&');
+
+      res.render("subscriptions", {
+          subscriptions: result.docs,
+          totalPages: result.totalPages,
+          currentPage: result.page,
+          searchQuery,
+          _csrf: token,
+          moment,
+          sort: req.query.sort || '',
+          order: req.query.order || '',
+          queryParams,  // Pass the queryParams to the template
+          paymentRange,
+          status: req.query.status || '',
+          category: req.query.category || '',
+          paymentType: req.query.paymentType || '',
+          paymentCycle: req.query.paymentCycle || ''
+      });
   } catch (error) {
-    console.error("Error fetching subscriptions:", error);
-    req.flash("error", "Unable to fetch subscriptions");
-    res.redirect("/");
+      console.error("Error fetching subscriptions:", error);
+      req.flash("error", "Unable to fetch subscriptions");
+      res.redirect("/");
   }
 };
 
 const createSubscription = async (req, res) => {
   try {
     req.body.createdBy = req.user._id;
-    req.body.email = req.user.email; // Ensure email is added to the subscription
+    req.body.email = req.user.email;
     req.body.dueDate = moment(req.body.dueDate).toDate();
 
     // Fetch company information from the JSON file on Google Drive
@@ -119,9 +102,11 @@ const createSubscription = async (req, res) => {
       req.body.companyUrl = companyData[0].website || req.body.companyUrl;
     }
 
+    //console.log('Company Data:', companyData); // Debugging line to check fetched data
+    //console.log('Company Logo URL:', req.body.companyLogo); // Debugging line to check logo URL
+
     const subscription = await Subscription.create(req.body);
 
-    // Check if due date is today
     if (moment(subscription.dueDate).isSame(moment(), 'day')) {
       notifyUser(subscription.email, req.user.name, subscription.company);
     }
