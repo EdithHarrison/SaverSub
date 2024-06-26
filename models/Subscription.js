@@ -69,7 +69,7 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     paymentCycle: {
         type: String,
-        enum: ['daily', 'weekly', 'monthly', 'quarterly', 'biyearly', 'yearly', 'manually'],
+        enum: ['daily', 'weekly', 'monthly', 'quarterly', 'biannually', 'annually', 'manually'],
         default: 'monthly'
     },
     lastNotified: {
