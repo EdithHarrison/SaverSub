@@ -13,7 +13,7 @@ const getSubscriptions = async (req, res) => {
       const limit = 10;
 
       const sortField = req.query.sort || 'dueDate';
-      const sortOrder = req.query.order || 'asc';
+      const sortOrder = req.query.order === 'asc' || req.query.order === 'desc' ? req.query.order : 'asc';
       const paymentRange = parseInt(req.query.paymentRange) || 100;
       const status = req.query.status ? (Array.isArray(req.query.status) ? req.query.status : [req.query.status]) : [];
       const category = req.query.category ? (Array.isArray(req.query.category) ? req.query.category : [req.query.category]) : [];
