@@ -5,13 +5,13 @@ const { notifyUser } = require('../Notification/notificationService');
 
 const checkSubscriptions = async () => {
   try {
-    console.log('Scheduler running...'); // Log scheduler run
-    const subscriptions = await Subscription.find({});
+    console.log('Scheduler running...');
+    const subscriptions = await Subscription.find({}).populate('createdBy');
     const today = moment().startOf('day');
 
     subscriptions.forEach(subscription => {
       const dueDate = moment(subscription.dueDate).startOf('day');
-      const notificationPreference = subscription.notificationPreference || 'same day'; // Default to 'same day' if not set
+      const notificationPreference = subscription.notificationPreference || 'same day';
 
       let notify = false;
       switch (notificationPreference) {
@@ -56,13 +56,13 @@ const checkSubscriptions = async () => {
             case 'quarterly':
               subscription.dueDate = moment(subscription.dueDate).add(3, 'months').toDate();
               break;
-            case 'biyearly':
+            case 'biannually':
               subscription.dueDate = moment(subscription.dueDate).add(6, 'months').toDate();
               break;
-            case 'yearly':
+            case 'annually':
               subscription.dueDate = moment(subscription.dueDate).add(1, 'year').toDate();
               break;
-            // For 'manually', we do nothing
+            // For 'manually', do nothing
           }
           subscription.save();
         }
