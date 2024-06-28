@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const moment = require('moment');
 const Subscription = require('../models/Subscription');
-const { notifyUser } = require('../Notification/notificationService'); // Import notifyUser
+const { notifyUser } = require('../Notification/notificationService');
 
 const checkSubscriptions = async () => {
   try {
@@ -11,11 +11,35 @@ const checkSubscriptions = async () => {
 
     subscriptions.forEach(subscription => {
       const dueDate = moment(subscription.dueDate).startOf('day');
-      
-      // Send notification if due date is today
-      if (dueDate.isSame(today)) {
+      const notificationPreference = subscription.notificationPreference || 'same day'; // Default to 'same day' if not set
+
+      let notify = false;
+      switch (notificationPreference) {
+        case 'same day':
+          notify = dueDate.isSame(today);
+          break;
+        case '2 days before':
+          notify = dueDate.isSame(today.clone().add(2, 'days'));
+          break;
+        case '3 days before':
+          notify = dueDate.isSame(today.clone().add(3, 'days'));
+          break;
+        case '4 days before':
+          notify = dueDate.isSame(today.clone().add(4, 'days'));
+          break;
+        case '5 days before':
+          notify = dueDate.isSame(today.clone().add(5, 'days'));
+          break;
+        case '1 week before':
+          notify = dueDate.isSame(today.clone().add(1, 'week'));
+          break;
+        default:
+          notify = dueDate.isSame(today);
+      }
+
+      if (notify) {
         console.log(`Sending notification for subscription: ${subscription.company}`); // Log notification send
-        notifyUser(subscription.email, subscription.createdBy.name, subscription.company); // Use notifyUser instead of sendNotification
+        notifyUser(subscription.email, subscription.createdBy.name, subscription.company, subscription.dueDate, notificationPreference); // Pass dueDate and notificationPreference
 
         // If the subscription is recurring, update the due date based on the payment cycle
         if (subscription.paymentType === 'recurring') {

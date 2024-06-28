@@ -87,6 +87,18 @@
                 </select>
             </div>
             <div class="input-group">
+                <label for="notificationPreference">Notification Preference:</label>
+                <select id="notificationPreference" name="notificationPreference">
+                    <option value="same day" <%= subscription && subscription.notificationPreference === 'same day' ? 'selected' : '' %>>Same Day</option>
+                    <option value="2 days before" <%= subscription && subscription.notificationPreference === '2 days before' ? 'selected' : '' %>>2 Days Before</option>
+                    <option value="3 days before" <%= subscription && subscription.notificationPreference === '3 days before' ? 'selected' : '' %>>3 Days Before</option>
+                    <option value="4 days before" <%= subscription && subscription.notificationPreference === '4 days before' ? 'selected' : '' %>>4 Days Before</option>
+                    <option value="5 days before" <%= subscription && subscription.notificationPreference === '5 days before' ? 'selected' : '' %>>5 Days Before</option>
+                    <option value="1 week before" <%= subscription && subscription.notificationPreference === '1 week before' ? 'selected' : '' %>>1 Week Before</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
                 <label for="email">Notification Email:</label>
                 <input type="email" id="email" name="email" value="<%= subscription ? subscription.email : req.user.email %>" required>
             </div>

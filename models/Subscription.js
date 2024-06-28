@@ -7,14 +7,11 @@ const SubscriptionSchema = new mongoose.Schema({
         required: [true, 'Please provide company name'],
         maxlength: 50
     },
-
     companyLogo: {
         type: String
-
     },
     companyUrl: {
         type: String
-
     },
     dueDate: {
         type: Date,
@@ -74,6 +71,11 @@ const SubscriptionSchema = new mongoose.Schema({
     },
     lastNotified: {
         type: Date
+    },
+    notificationPreference: {
+        type: String,
+        enum: ['same day', '2 days before', '3 days before', '4 days before', '5 days before', '1 week before'],
+        default: 'same day'
     }
 }, { timestamps: true });
 
