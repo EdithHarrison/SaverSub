@@ -160,7 +160,7 @@
                             <button class="dropbtn"></button>
                             <div class="dropdown-content">
                                 <form action="/subscriptions" method="get">
-                                    <% for (const cycle of ['daily', 'weekly', 'monthly', 'quarterly', 'biannually', 'yearly', 'manually']) { %>
+                                    <% for (const cycle of ['daily', 'weekly', 'monthly', 'quarterly', 'biannually', 'annually', 'manually']) { %>
                                         <label><input type="checkbox" name="paymentCycle" value="<%= cycle %>" <%= paymentCycle.includes(cycle) ? 'checked' : '' %>> <%= cycle %></label>
                                     <% } %>
                                     <button type="submit" class="btn btn-primary">Apply</button>
@@ -177,13 +177,13 @@
                             </div>
                         </div>
                     </th>
-                    <th>Notif Preference
+                    <th>Notification Preference
                         <div class="dropdown">
                             <button class="dropbtn"></button>
                             <div class="dropdown-content">
                                 <form action="/subscriptions" method="get">
-                                    <% for (const notification of ['same day', '2 days before', '3 days before', '4 days before', '5 days before', '1 week before']) { %>
-                                        <label><input type="checkbox" name="notificationPreference" value="<%= notification %>" <%= notificationPreference.includes(notification) ? 'checked' : '' %>> <%= notification %></label>
+                                    <% for (const preference of ['same day', '2 days before', '3 days before', '4 days before', '5 days before', '1 week before']) { %>
+                                        <label><input type="checkbox" name="notificationPreference" value="<%= preference %>" <%= notificationPreference.includes(preference) ? 'checked' : '' %>> <%= preference %></label>
                                     <% } %>
                                     <button type="submit" class="btn btn-primary">Apply</button>
                                     <input type="hidden" name="search" value="<%= searchQuery %>">
@@ -194,6 +194,7 @@
                                     <input type="hidden" name="paymentRange" value="<%= paymentRange %>">
                                     <input type="hidden" name="paymentType" value="<%= paymentType %>">
                                     <input type="hidden" name="paymentCycle" value="<%= paymentCycle %>">
+                                    <input type="hidden" name="notificationPreference" value="<%= notificationPreference %>">
                                 </form>
                             </div>
                         </div>
@@ -225,7 +226,7 @@
                         </td>
                     </tr>
                     <tr id="company-url-<%= subscription._id %>" class="company-url" style="display:none;">
-                        <td colspan="11">
+                        <td colspan="10">
                             <a href="<%= subscription.companyUrl %>" target="_blank"><%= subscription.companyUrl %></a>
                         </td>
                     </tr>
@@ -254,4 +255,5 @@
 </main>
 
 <%- include("partials/footer.ejs") %>
+
 <script src="/js/subscriptions.js"></script>
